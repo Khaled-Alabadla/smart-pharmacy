@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Pharmacy Management - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="icon">💊</span>
+                <h1>Smart Pharmacy</h1>
+            </div>
+            <div class="status-bar">
+                <span id="date-display"></span>
+            </div>
+        </header>
+
+        <main class="dashboard-grid">
+            <!-- Sidebar / Stats -->
+            <aside class="stats-panel glass">
+                <h2>Quick Stats</h2>
+                <div class="stat-card">
+                    <h3>Total Inventory</h3>
+                    <p id="total-items">0</p>
+                </div>
+                <div class="stat-card warning">
+                    <h3>Expired Items</h3>
+                    <p id="expired-count">0</p>
+                </div>
+                <div class="stat-card success">
+                    <h3>Daily Sales</h3>
+                    <p id="total-sales">0</p>
+                </div>
+                <button id="refresh-btn" class="primary-btn">Refresh Data</button>
+            </aside>
+
+            <!-- Inventory Section -->
+            <section class="inventory-section glass">
+                <div class="section-header">
+                    <h2>Live Inventory</h2>
+                    <button id="add-med-modal-btn" class="secondary-btn">+ Add Medicine</button>
+                </div>
+                <div class="table-container">
+                    <table id="inventory-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Quantity</th>
+                                <th>Base Price</th>
+                                <th>Final Price</th>
+                                <th>Expiry</th>
+                                <th>Prescription</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-body">
+                            <!-- Items will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sales History -->
+            <section class="sales-section glass">
+                <h2>Recent Sales</h2>
+                <div id="sales-list" class="sales-list">
+                    <!-- Sales records here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="sale-modal" class="modal">
+        <div class="modal-content glass">
+            <h2>Process Sale: <span id="m-sale-name"></span></h2>
+            <form id="sale-form">
+                <input type="hidden" id="sale-name">
+                <label for="sale-qty">Quantity</label>
+                <input type="number" id="sale-qty" min="1" required>
+                
+                <label for="cust-name">Customer Name</label>
+                <input type="text" id="cust-name" placeholder="John Doe" required>
+                
+                <label for="cust-phone">Phone</label>
+                <input type="text" id="cust-phone" placeholder="0123456789">
+
+                <div id="prescription-check" class="hidden">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="pres-confirmed">
+                        <span class="checkmark"></span>
+                        Prescription Verified
+                    </label>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="primary-btn">Complete Sale</button>
+                    <button type="button" class="close-modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="add-modal" class="modal">
+        <div class="modal-content glass">
+            <h2>Add New Medicine</h2>
+            <form id="add-form">
+                <label>Name</label>
+                <input type="text" id="add-name" required>
+                <div class="row">
+                    <div>
+                        <label>Price</label>
+                        <input type="number" id="add-price" step="0.01" required>
+                    </div>
+                    <div>
+                        <label>Quantity</label>
+                        <input type="number" id="add-qty" required>
+                    </div>
+                </div>
+                <label>Expiry Date</label>
+                <input type="date" id="add-expiry" required>
+                
+                <label class="checkbox-container">
+                    <input type="checkbox" id="add-pres">
+                    <span class="checkmark"></span>
+                    Requires Prescription
+                </label>
+
+                <div class="modal-actions">
+                    <button type="submit" class="primary-btn">Add to Stock</button>
+                    <button type="button" class="close-modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
