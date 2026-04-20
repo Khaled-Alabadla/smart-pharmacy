@@ -5,6 +5,13 @@ A modern web application for pharmacy inventory and sales management.
 ## 🚀 Overview
 This system helps pharmacists track medicine stock, manage sales, and monitor expired products through a simple, responsive dashboard.
 
+## 📸 Screenshots
+### Desktop View
+![Desktop Dashboard](static/img/desktop.png)
+
+### Mobile View
+![Mobile Dashboard](static/img/mobile.png)
+
 ## ✨ Features
 - **Live Inventory**: Track medicine quantities and prices.
 - **Sales Tracking**: Process customer sales with prescription verification.
