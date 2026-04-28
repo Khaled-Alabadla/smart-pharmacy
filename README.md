@@ -15,20 +15,20 @@ This system helps pharmacists track medicine stock, manage sales, and monitor ex
 - **Responsive UI**: Works on Desktop, Tablet, and Mobile.
 
 ## 🛠️ Tech Stack
-- **Backend**: FastAPI (Python)
+- **Backend**: Flask (Python)
 - **Frontend**: HTML5, CSS3, JavaScript
 
 ## 🏃 Quick Start
 1. **Install dependencies**:
    ```bash
-   pip install fastapi uvicorn
+   pip install flask
    ```
 2. **Run the server**:
    ```bash
-   python -m uvicorn app:app --reload
+   python app.py
    ```
 3. **Open the app**:
-   Go to `http://127.0.0.1:8000/static/index.html`
+   Go to `http://127.0.0.1:5000/`
 
 ---
 *Developed with ❤️ by **Khaled-Alabadla***

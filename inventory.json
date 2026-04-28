@@ -10,7 +10,7 @@
         {
             "name": "Amoxicillin",
             "base_price": 25.0,
-            "quantity": 20,
+            "quantity": 16,
             "expiry_date": "2026-05-20",
             "requires_prescription": true
         },
@@ -24,7 +24,7 @@
         {
             "name": "Acamol",
             "base_price": 5.0,
-            "quantity": 10,
+            "quantity": 5,
             "expiry_date": "2026-04-28",
             "requires_prescription": false
         }
@@ -36,6 +36,20 @@
             "quantity": 20,
             "total_price": 105.0,
             "customer": "Khaled Esam"
+        },
+        {
+            "date": "2026-04-22 14:34:35",
+            "medicine": "Acamol",
+            "quantity": 5,
+            "total_price": 26.25,
+            "customer": "Shatha"
+        },
+        {
+            "date": "2026-04-28 10:01:47",
+            "medicine": "Amoxicillin",
+            "quantity": 4,
+            "total_price": 105.0,
+            "customer": "Bilal Qanoa"
         }
     ]
 }

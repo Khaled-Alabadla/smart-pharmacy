@@ -1,41 +1,23 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from flask import Flask, jsonify, request, abort, render_template
 from manager import PharmacyManager
 from tables import Medicine, Customer
 from exceptions import PharmacyError
 import os
 
-app = FastAPI(title="Smart Pharmacy Management System")
+app = Flask(__name__, static_folder='static')
 manager = PharmacyManager()
 
 # Serve static files for the frontend
 if not os.path.exists("static"):
     os.makedirs("static")
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Pydantic models for API
-class MedicineSchema(BaseModel):
-    name: str
-    base_price: float
-    quantity: int
-    expiry_date: str
-    requires_prescription: bool = False
-
-class SaleRequest(BaseModel):
-    name: str
-    quantity: int
-    customer_name: str
-    customer_phone: str
-    prescription_confirmed: bool = False
-
-@app.get("/")
+@app.route("/")
 def root():
-    return {"message": "Welcome to the Smart Pharmacy Management API"}
+    return render_template('index.html')
 
-@app.get("/inventory")
+@app.route("/inventory")
 def get_inventory():
-    return [
+    return jsonify([
         {
             "name": m.name,
             "base_price": m.base_price,
@@ -45,38 +27,40 @@ def get_inventory():
             "requires_prescription": m.requires_prescription,
             "is_expired": m.is_expired()
         } for m in manager.inventory
-    ]
+    ])
 
-@app.post("/add_medicine")
-def add_medicine(med: MedicineSchema):
-    new_med = Medicine(med.name, med.base_price, med.quantity, med.expiry_date, med.requires_prescription)
+@app.route("/add_medicine", methods=['POST'])
+def add_medicine():
+    med = request.json
+    new_med = Medicine(med['name'], med['base_price'], med['quantity'], med['expiry_date'], med.get('requires_prescription', False))
     manager.add_medicine(new_med)
-    return {"status": "success", "medicine": med.name}
+    return jsonify({"status": "success", "medicine": med['name']})
 
-@app.post("/sell")
-def sell_medicine(sale: SaleRequest):
-    customer = Customer(sale.customer_name, sale.customer_phone)
+@app.route("/sell", methods=['POST'])
+def sell_medicine():
+    sale = request.json
+    customer = Customer(sale['customer_name'], sale['customer_phone'])
     try:
         receipt = manager.sell_medicine(
-            sale.name, 
-            sale.quantity, 
+            sale['name'], 
+            sale['quantity'], 
             customer, 
-            sale.prescription_confirmed
+            sale.get('prescription_confirmed', False)
         )
-        return {"status": "success", "receipt": receipt, "customer_debt": customer.balance}
+        return jsonify({"status": "success", "receipt": receipt, "customer_debt": customer.balance})
     except PharmacyError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        return jsonify({"error": str(e)}), 400
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+        return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
 
-@app.get("/report/expired")
+@app.route("/report/expired")
 def expired_report():
     expired = manager.get_expired_report()
-    return [{"name": m.name, "expiry": m.expiry_date.strftime("%Y-%m-%d")} for m in expired]
+    return jsonify([{"name": m.name, "expiry": m.expiry_date.strftime("%Y-%m-%d")} for m in expired])
 
-@app.get("/sales_history")
+@app.route("/sales_history")
 def sales_history():
-    return manager.sales_history
+    return jsonify(manager.sales_history)
 
 # Initial Data Setup
 if not manager.inventory:
@@ -87,3 +71,6 @@ if not manager.inventory:
     ]
     for m in initial_meds:
         manager.add_medicine(m)
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
