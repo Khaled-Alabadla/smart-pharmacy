@@ -124,7 +124,7 @@ document.getElementById('sale-form').onsubmit = async (e) => {
         loadData();
         e.target.reset();
     } else {
-        alert(result.detail);
+        alert(result.error || 'Unexpected error');
     }
 };
 

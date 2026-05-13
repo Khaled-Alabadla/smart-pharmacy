@@ -17,6 +17,7 @@ def root():
 
 @app.route("/inventory")
 def get_inventory():
+    inventory = manager.get_inventory()
     return jsonify([
         {
             "name": m.name,
@@ -26,7 +27,7 @@ def get_inventory():
             "expiry_date": m.expiry_date.strftime("%Y-%m-%d"),
             "requires_prescription": m.requires_prescription,
             "is_expired": m.is_expired()
-        } for m in manager.inventory
+        } for m in inventory
     ])
 
 @app.route("/add_medicine", methods=['POST'])
@@ -60,17 +61,8 @@ def expired_report():
 
 @app.route("/sales_history")
 def sales_history():
-    return jsonify(manager.sales_history)
+    return jsonify(manager.get_sales_history())
 
-# Initial Data Setup
-if not manager.inventory:
-    initial_meds = [
-        Medicine("Panadol", 10.0, 50, "2027-12-31", False),
-        Medicine("Amoxicillin", 25.0, 20, "2026-05-20", True),
-        Medicine("Old Syrum", 5.0, 5, "2024-01-01", False),
-    ]
-    for m in initial_meds:
-        manager.add_medicine(m)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
